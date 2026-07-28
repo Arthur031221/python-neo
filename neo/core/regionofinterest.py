@@ -79,9 +79,12 @@ class CircularRegionOfInterest(RegionOfInterest):
 
     def pixels_in_region(self):
         """Returns a list of pixels whose *centres* are within the circle"""
+        # is_inside() accepts the boundary itself, so the search has to run up to
+        # and including floor(centre + radius). Stopping at ceil(centre + radius)
+        # excludes that last row and column.
         pixel_in_list = []
-        for y in range(int(floor(self.y - self.radius)), int(ceil(self.y + self.radius))):
-            for x in range(int(floor(self.x - self.radius)), int(ceil(self.x + self.radius))):
+        for y in range(int(ceil(self.y - self.radius)), int(floor(self.y + self.radius)) + 1):
+            for x in range(int(ceil(self.x - self.radius)), int(floor(self.x + self.radius)) + 1):
                 if self.is_inside(x, y):
                     pixel_in_list.append([x, y])
 
